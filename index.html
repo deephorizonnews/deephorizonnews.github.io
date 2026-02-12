@@ -19,34 +19,57 @@
         
         .container { max-width: 850px; margin: 0 auto; padding: 20px; flex: 1; }
 
-        /* Painel Admin */
         #admin-panel { display: none; background: #fff; padding: 30px; border: 3px solid #000; margin: 40px 0; box-shadow: 10px 10px 0px #000; }
         #admin-panel input, #admin-panel textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; box-sizing: border-box; font-family: inherit; }
         .publish-btn { background: black; color: white; border: none; padding: 15px; cursor: pointer; width: 100%; font-weight: bold; text-transform: uppercase; }
 
-        /* Estilo dos Cards de Notícia (Clickable) */
+        /* Estilo dos Cards */
         .blog-card { 
             background: white; margin-bottom: 30px; border: 1px solid #eee; 
-            cursor: pointer; transition: 0.2s; position: relative; overflow: hidden;
-            border-radius: 8px;
+            cursor: pointer; transition: 0.2s; position: relative; border-radius: 8px;
         }
-        .blog-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         
-        .card-header { padding: 25px; }
-        .card-header h3 { margin: 0; font-size: 2rem; line-height: 1.2; font-weight: 900; color: #000; }
-        
-        .card-image img { width: 100%; height: 400px; object-fit: cover; display: block; }
+        /* Diferença visual quando ativa */
+        .blog-card.active { 
+            cursor: default; 
+            background: #fdfdfd; 
+            border: 1px solid #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
 
-        /* Conteúdo Expandido (Respeita Parágrafos) */
+        .card-header { padding: 25px; position: relative; }
+        .card-header h3 { margin: 0; font-size: 2rem; line-height: 1.2; font-weight: 900; padding-right: 30px; }
+        
+        /* Botão X para fechar notícia */
+        .close-post { 
+            display: none; position: absolute; top: 20px; right: 20px; 
+            font-size: 24px; font-weight: bold; cursor: pointer; color: #000;
+            width: 30px; height: 30px; text-align: center; line-height: 30px;
+        }
+        .active .close-post { display: block; }
+
+        .card-image img { width: 100%; height: 400px; object-fit: cover; display: block; cursor: pointer; }
+
         .card-content { 
             display: none; padding: 25px; border-top: 1px solid #eee; 
-            background: #fff;
-            white-space: pre-wrap; 
-            font-size: 1.15rem; color: #333;
+            white-space: pre-wrap; font-size: 1.15rem; color: #333;
         }
+        .active .card-content { display: block; }
         
         .post-date { display: block; margin-top: 10px; color: #bbb; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; }
-        
+
+        /* Lightbox da Imagem (Tela Cheia) */
+        #lightbox {
+            display: none; position: fixed; z-index: 9999; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.95);
+            justify-content: center; align-items: center;
+        }
+        #lightbox img { max-width: 90%; max-height: 90%; border-radius: 4px; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        #close-lightbox {
+            position: absolute; top: 20px; right: 30px; color: #fff;
+            font-size: 40px; font-weight: bold; cursor: pointer;
+        }
+
         footer { background-color: #000; color: #fff; text-align: center; padding: 40px 20px; font-size: 0.9rem; letter-spacing: 1px; margin-top: 50px; }
     </style>
 </head>
@@ -67,18 +90,20 @@
             <h2 style="margin-top:0">Novo Post</h2>
             <input type="text" id="post-title" placeholder="Título da Notícia">
             <input type="text" id="post-image" placeholder="Link da Imagem (URL)">
-            <textarea id="post-body" rows="10" placeholder="Conteúdo da notícia (Dê parágrafos normalmente)..."></textarea>
+            <textarea id="post-body" rows="10" placeholder="Conteúdo da notícia..."></textarea>
             <button class="publish-btn" onclick="createPost()">Publicar Agora</button>
         </div>
 
         <div id="blog-feed"></div>
-        
         <button id="load-more" style="display:none; width:100%; padding:15px; margin:20px 0; border: 2px solid black; background: white; font-weight: bold; cursor: pointer;" onclick="loadPosts(true)">VER MAIS NOTÍCIAS</button>
     </div>
 
-    <footer>
-        Deep Horizons. All rights reserved © 2026
-    </footer>
+    <div id="lightbox" onclick="closeLightbox()">
+        <span id="close-lightbox">&times;</span>
+        <img id="lightbox-img" src="">
+    </div>
+
+    <footer>Deep Horizons. All rights reserved © 2026</footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -101,9 +126,7 @@
         const provider = new GoogleAuthProvider();
         let lastVisiblePost = null;
 
-        window.handleLogin = async () => {
-            try { await signInWithPopup(auth, provider); } catch (e) { console.error(e); }
-        };
+        window.handleLogin = async () => { try { await signInWithPopup(auth, provider); } catch (e) { console.error(e); } };
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -111,9 +134,7 @@
                 document.getElementById('user-info').style.display = 'inline';
                 document.getElementById('login-btn').innerText = 'Sair';
                 document.getElementById('login-btn').onclick = () => auth.signOut().then(() => location.reload());
-                if (user.email === "campameurer@gmail.com") {
-                    document.getElementById('admin-panel').style.display = 'block';
-                }
+                if (user.email === "campameurer@gmail.com") document.getElementById('admin-panel').style.display = 'block';
             }
         });
 
@@ -121,23 +142,49 @@
             const title = document.getElementById('post-title').value;
             const img = document.getElementById('post-image').value;
             const body = document.getElementById('post-body').value;
-            if(!title || !body) return alert("Erro: Título e Conteúdo obrigatórios.");
+            if(!title || !body) return alert("Preencha os campos!");
             try {
                 await addDoc(collection(db, "posts"), { title, image: img, content: body, date: new Date() });
                 location.reload();
             } catch (e) { alert("Erro de permissão."); }
         };
 
-        window.togglePost = (element) => {
-            const content = element.querySelector('.card-content');
-            content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+        // LÓGICA DE ABRIR NOTÍCIA / EXPANDIR IMAGEM
+        window.handleCardClick = (event, cardElement) => {
+            const isImage = event.target.tagName === 'IMG';
+            const isCloseBtn = event.target.classList.contains('close-post');
+            const isActive = cardElement.classList.contains('active');
+
+            // Se clicou no X de fechar a notícia
+            if (isCloseBtn) {
+                event.stopPropagation();
+                cardElement.classList.remove('active');
+                return;
+            }
+
+            // Se a notícia NÃO está aberta, o primeiro clique abre ela
+            if (!isActive) {
+                cardElement.classList.add('active');
+            } 
+            // Se já está aberta e clicou na IMAGEM, abre o Lightbox
+            else if (isActive && isImage) {
+                openLightbox(event.target.src);
+            }
+        };
+
+        window.openLightbox = (src) => {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').style.display = 'flex';
+        };
+
+        window.closeLightbox = () => {
+            document.getElementById('lightbox').style.display = 'none';
         };
 
         async function loadPosts(isNextPage = false) {
             let q = query(collection(db, "posts"), orderBy("date", "desc"), limit(6));
-            if (isNextPage && lastVisiblePost) {
-                q = query(collection(db, "posts"), orderBy("date", "desc"), startAfter(lastVisiblePost), limit(6));
-            }
+            if (isNextPage && lastVisiblePost) q = query(collection(db, "posts"), orderBy("date", "desc"), startAfter(lastVisiblePost), limit(6));
+            
             const snap = await getDocs(q);
             if (snap.empty) { document.getElementById('load-more').style.display = 'none'; return; }
             lastVisiblePost = snap.docs[snap.docs.length - 1];
@@ -146,15 +193,16 @@
             snap.forEach(doc => {
                 const p = doc.data();
                 const d = p.date.toDate().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' });
-                const imgTag = p.image ? `<div class="card-image"><img src="${p.image}"></div>` : '';
+                const imgSection = p.image ? `<div class="card-image"><img src="${p.image}"></div>` : '';
                 
                 feed.innerHTML += `
-                    <article class="blog-card" onclick="togglePost(this)">
+                    <article class="blog-card" onclick="handleCardClick(event, this)">
                         <div class="card-header">
+                            <span class="close-post">&times;</span>
                             <h3>${p.title}</h3>
-                            <span class="post-date">Publicado em ${d} • Clique para ler</span>
+                            <span class="post-date">Publicado em ${d}</span>
                         </div>
-                        ${imgTag}
+                        ${imgSection}
                         <div class="card-content">${p.content}</div>
                     </article>`;
             });
