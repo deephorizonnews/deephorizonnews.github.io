@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-adsense-account" content="ca-pub-1257551136033803">
-    <title>Deep Horizons | Future Tech News</title>
-
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1257551136033803"
-     crossorigin="anonymous"></script>
+    <title>Deep Horizons | Everyday's technology news</title>
     
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1257551136033803" crossorigin="anonymous"></script>
+
     <style>
         :root { --primary-black: #000000; --bg-gray: #fcfcfc; --text-main: #1a1a1a; }
         body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--bg-gray); color: var(--text-main); line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
@@ -23,12 +22,15 @@
         
         .container { max-width: 1000px; margin: 0 auto; padding: 20px; flex: 1; }
 
+        /* Admin UI */
         #admin-controls { display: none; margin: 20px 0; text-align: center; }
         #admin-panel { display: none; background: #fff; padding: 30px; border: 3px solid #000; margin: 20px 0; box-shadow: 10px 10px 0px #000; }
-        #admin-panel input, #admin-panel textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; box-sizing: border-box; }
+        #admin-panel input, #admin-panel textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; box-sizing: border-box; font-family: inherit; }
 
+        /* Grid de Notícias */
         #blog-feed { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; margin-top: 30px; }
 
+        /* Card de Notícia */
         .blog-card { background: white; border: 1px solid #eee; cursor: pointer; position: relative; border-radius: 8px; overflow: hidden; height: fit-content; transition: 0.3s; }
         .blog-card.active { grid-column: 1 / -1; cursor: default; border: 1px solid #000; }
 
@@ -36,34 +38,30 @@
         .card-header h3 { margin: 0; font-size: 1.5rem; line-height: 1.2; padding-right: 60px; color: #000; }
         .active .card-header h3 { font-size: 2.2rem; }
         
+        /* Botão Fechar Notícia */
         .close-post { display: none; position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; z-index: 10; color: #000; }
         .active .close-post { display: block; }
 
-        .admin-dots { 
-            display: none; 
-            position: absolute; 
-            top: 10px; 
-            right: 40px; 
-            cursor: pointer; 
-            font-size: 1.8rem; 
-            color: #000 !important; 
-            z-index: 20; 
-            padding: 5px;
-            font-weight: bold;
-        }
+        /* Três Pontinhos Verticais Admin */
+        .admin-dots { display: none; position: absolute; top: 10px; right: 40px; cursor: pointer; font-size: 1.8rem; color: #000 !important; z-index: 20; padding: 5px; font-weight: bold; }
 
         .card-image img { width: 100%; height: 250px; object-fit: cover; display: block; }
         .active .card-image img { height: 450px; }
 
-        .card-content { display: none; padding: 25px; white-space: pre-wrap; font-size: 1.1rem; border-top: 1px solid #eee; }
+        .card-content { display: none; padding: 25px; white-space: pre-wrap; font-size: 1.1rem; border-top: 1px solid #eee; background: #fff; color: #333; }
         .active .card-content { display: block; }
+
+        /* Banner de Cookies */
+        #cookie-banner { position: fixed; bottom: 0; left: 0; width: 100%; background: #000; color: #fff; padding: 20px; display: none; z-index: 10000; text-align: center; font-size: 0.9rem; border-top: 1px solid #444; }
+        .cookie-btn { background: #fff; color: #000; border: none; padding: 8px 25px; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px; margin-left: 15px; }
+
+        /* Botões Gerais */
+        .btn-main { display: block; width: 100%; padding: 15px; margin: 20px 0; border: 2px solid black; background: white; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-admin-toggle { background: #000; color: #fff; max-width: 300px; margin: 0 auto; }
 
         /* Lightbox */
         #lightbox { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
         #lightbox img { max-width: 90%; max-height: 90%; }
-
-        .btn-main { display: block; width: 100%; padding: 15px; margin: 20px 0; border: 2px solid black; background: white; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-admin-toggle { background: #000; color: #fff; max-width: 300px; margin: 0 auto; }
 
         footer { background-color: #000; color: #fff; text-align: center; padding: 40px 20px; margin-top: 50px; }
     </style>
@@ -99,6 +97,11 @@
         <button id="load-more" class="btn-main" style="display:none;" onclick="toggleLoadMore()">Ver Mais Notícias</button>
     </div>
 
+    <div id="cookie-banner">
+        This website uses cookies to ensure you get the best experience and to personalize ads. 
+        <button class="cookie-btn" onclick="acceptCookies()">Accept</button>
+    </div>
+
     <div id="lightbox" onclick="this.style.display='none'"><img id="lightbox-img" src=""></div>
 
     <footer>Deep Horizons. All rights reserved © 2026</footer>
@@ -122,7 +125,6 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
-        
         let lastVisiblePost = null;
         let isAdmin = false;
 
@@ -140,16 +142,17 @@
             loadPosts();
         });
 
+        window.acceptCookies = () => {
+            localStorage.setItem('cookiesAccepted', 'true');
+            document.getElementById('cookie-banner').style.display = 'none';
+        };
+
         window.toggleAdminPanel = () => {
             const panel = document.getElementById('admin-panel');
             const btn = document.getElementById('toggle-icon-btn');
-            if (panel.style.display === 'block') {
-                panel.style.display = 'none';
-                btn.innerText = "+ Nova Publicação";
-            } else {
-                panel.style.display = 'block';
-                btn.innerText = "- Nova Publicação";
-            }
+            const isVisible = panel.style.display === 'block';
+            panel.style.display = isVisible ? 'none' : 'block';
+            btn.innerText = isVisible ? "+ Nova Publicação" : "- Nova Publicação";
         };
 
         window.deletePost = async (event, postId) => {
@@ -166,10 +169,8 @@
             const isImage = event.target.tagName === 'IMG';
             const isClose = event.target.classList.contains('close-post');
             const isDots = event.target.classList.contains('admin-dots');
-            
             if (isDots) return;
             if (isClose) { event.stopPropagation(); element.classList.remove('active'); return; }
-            
             if (!element.classList.contains('active')) {
                 element.classList.add('active');
                 element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -179,34 +180,17 @@
             }
         };
 
-        window.toggleLoadMore = () => {
-            const btn = document.getElementById('load-more');
-            if (btn.innerText === "VER MAIS NOTÍCIAS") {
-                loadPosts(true);
-                btn.innerText = "RECOLHER NOTÍCIAS";
-            } else {
-                location.reload();
-            }
-        };
-
         async function loadPosts(isNextPage = false) {
             let q = query(collection(db, "posts"), orderBy("date", "desc"), limit(6));
-            if (isNextPage && lastVisiblePost) {
-                q = query(collection(db, "posts"), orderBy("date", "desc"), startAfter(lastVisiblePost), limit(6));
-            }
-            
+            if (isNextPage && lastVisiblePost) q = query(collection(db, "posts"), orderBy("date", "desc"), startAfter(lastVisiblePost), limit(6));
             const snap = await getDocs(q);
             if (snap.empty) return;
             lastVisiblePost = snap.docs[snap.docs.length - 1];
-            
             const feed = document.getElementById('blog-feed');
             snap.forEach(docSnap => {
                 const p = docSnap.data();
                 const id = docSnap.id;
-                
-                // Se for admin, a classe admin-dots recebe display block via estilo inline para garantir
                 const dotsDisplay = isAdmin ? 'display: block;' : '';
-                
                 feed.innerHTML += `
                     <article class="blog-card" onclick="togglePost(event, this)">
                         <div class="card-header">
@@ -221,6 +205,12 @@
             document.getElementById('load-more').style.display = 'block';
         }
 
+        window.toggleLoadMore = () => {
+            const btn = document.getElementById('load-more');
+            if (btn.innerText === "VER MAIS NOTÍCIAS") { loadPosts(true); btn.innerText = "RECOLHER NOTÍCIAS"; }
+            else { location.reload(); }
+        };
+
         window.createPost = async () => {
             const title = document.getElementById('post-title').value;
             const img = document.getElementById('post-image').value;
@@ -229,6 +219,9 @@
             await addDoc(collection(db, "posts"), { title, image: img, content: body, date: new Date() });
             location.reload();
         };
+
+        // Verificar cookies ao carregar
+        if (!localStorage.getItem('cookiesAccepted')) { document.getElementById('cookie-banner').style.display = 'block'; }
     </script>
 </body>
 </html>
