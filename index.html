@@ -35,13 +35,12 @@
         .card-header h3 { margin: 0; font-size: 1.5rem; line-height: 1.2; padding-right: 60px; }
         .active .card-header h3 { font-size: 2.2rem; }
         
-        /* Botões */
+        /* Botão Fechar Notícia */
         .close-post { display: none; position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; z-index: 10; }
         .active .close-post { display: block; }
 
-        /* Três Pontinhos */
-        .admin-dots { display: none; position: absolute; top: 15px; right: 45px; cursor: pointer; font-size: 1.5rem; line-height: 1; color: #888; padding: 5px; z-index: 10; }
-        .admin-dots:hover { color: #000; }
+        /* Três Pontinhos Verticais Pretos */
+        .admin-dots { display: none; position: absolute; top: 12px; right: 40px; cursor: pointer; font-size: 1.8rem; line-height: 1; color: #000; padding: 5px; z-index: 10; }
 
         .card-image img { width: 100%; height: 250px; object-fit: cover; display: block; }
         .active .card-image img { height: 450px; }
@@ -63,7 +62,7 @@
 
     <nav>
         <span id="user-info"></span>
-        <button id="login-btn" onclick="handleLogin()">Login com o Google</button>
+        <button id="login-btn" onclick="handleLogin()">Login with Google</button>
     </nav>
 
     <header>
@@ -73,7 +72,7 @@
 
     <div class="container">
         <div id="admin-controls">
-            <button class="btn-main btn-admin-toggle" onclick="toggleAdminPanel()">+ Nova Publicação</button>
+            <button id="toggle-icon-btn" class="btn-main btn-admin-toggle" onclick="toggleAdminPanel()">+ Nova Publicação</button>
             <div id="admin-panel">
                 <h2 style="margin-top:0">Criar Nova Notícia</h2>
                 <input type="text" id="post-title" placeholder="Título da Notícia">
@@ -132,9 +131,17 @@
             loadPosts();
         });
 
+        // Alterna Painel e Ícone (+/-)
         window.toggleAdminPanel = () => {
             const panel = document.getElementById('admin-panel');
-            panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+            const btn = document.getElementById('toggle-icon-btn');
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+                btn.innerText = "+ Nova Publicação";
+            } else {
+                panel.style.display = 'block';
+                btn.innerText = "- Nova Publicação";
+            }
         };
 
         window.deletePost = async (event, postId) => {
@@ -170,7 +177,7 @@
                 loadPosts(true);
                 btn.innerText = "RECOLHER NOTÍCIAS";
             } else {
-                location.reload(); // Maneira mais simples de recolher e resetar o grid
+                location.reload();
             }
         };
 
@@ -188,7 +195,7 @@
             snap.forEach(docSnap => {
                 const p = docSnap.data();
                 const id = docSnap.id;
-                const dots = isAdmin ? `<span class="admin-dots" onclick="deletePost(event, '${id}')">...</span>` : '';
+                const dots = isAdmin ? `<span class="admin-dots" onclick="deletePost(event, '${id}')">⋮</span>` : '';
                 
                 feed.innerHTML += `
                     <article class="blog-card" onclick="togglePost(event, this)">
