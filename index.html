@@ -20,15 +20,12 @@
         
         .container { max-width: 1000px; margin: 0 auto; padding: 20px; flex: 1; }
 
-        /* Admin UI */
         #admin-controls { display: none; margin: 20px 0; text-align: center; }
         #admin-panel { display: none; background: #fff; padding: 30px; border: 3px solid #000; margin: 20px 0; box-shadow: 10px 10px 0px #000; }
         #admin-panel input, #admin-panel textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; box-sizing: border-box; }
 
-        /* Grid de Notícias */
         #blog-feed { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; margin-top: 30px; }
 
-        /* Card de Notícia */
         .blog-card { background: white; border: 1px solid #eee; cursor: pointer; position: relative; border-radius: 8px; overflow: hidden; height: fit-content; transition: 0.3s; }
         .blog-card.active { grid-column: 1 / -1; cursor: default; border: 1px solid #000; }
 
@@ -36,13 +33,11 @@
         .card-header h3 { margin: 0; font-size: 1.5rem; line-height: 1.2; padding-right: 60px; color: #000; }
         .active .card-header h3 { font-size: 2.2rem; }
         
-        /* Botão Fechar Notícia */
         .close-post { display: none; position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; z-index: 10; color: #000; }
         .active .close-post { display: block; }
 
-        /* Três Pontinhos Verticais Pretos (Garantindo Visibilidade) */
         .admin-dots { 
-            display: none; /* Só aparece via JS se for admin */
+            display: none; 
             position: absolute; 
             top: 10px; 
             right: 40px; 
