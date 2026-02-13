@@ -27,10 +27,10 @@
         #admin-panel { display: none; background: #fff; padding: 30px; border: 3px solid #000; margin: 20px 0; box-shadow: 10px 10px 0px #000; }
         #admin-panel input, #admin-panel textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; box-sizing: border-box; font-family: inherit; }
 
-        /* Grid de Notícias */
+        /* News Grid */
         #blog-feed { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; margin-top: 30px; }
 
-        /* Card de Notícia */
+        /* News Card */
         .blog-card { background: white; border: 1px solid #eee; cursor: pointer; position: relative; border-radius: 8px; overflow: hidden; height: fit-content; transition: 0.3s; }
         .blog-card.active { grid-column: 1 / -1; cursor: default; border: 1px solid #000; }
 
@@ -38,11 +38,11 @@
         .card-header h3 { margin: 0; font-size: 1.5rem; line-height: 1.2; padding-right: 60px; color: #000; }
         .active .card-header h3 { font-size: 2.2rem; }
         
-        /* Botão Fechar Notícia */
+        /* Close Button */
         .close-post { display: none; position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; z-index: 10; color: #000; }
         .active .close-post { display: block; }
 
-        /* Três Pontinhos Verticais Admin */
+        /* Admin Vertical Dots */
         .admin-dots { display: none; position: absolute; top: 10px; right: 40px; cursor: pointer; font-size: 1.8rem; color: #000 !important; z-index: 20; padding: 5px; font-weight: bold; }
 
         .card-image img { width: 100%; height: 250px; object-fit: cover; display: block; }
@@ -51,11 +51,11 @@
         .card-content { display: none; padding: 25px; white-space: pre-wrap; font-size: 1.1rem; border-top: 1px solid #eee; background: #fff; color: #333; }
         .active .card-content { display: block; }
 
-        /* Banner de Cookies */
+        /* Cookie Banner */
         #cookie-banner { position: fixed; bottom: 0; left: 0; width: 100%; background: #000; color: #fff; padding: 20px; display: none; z-index: 10000; text-align: center; font-size: 0.9rem; border-top: 1px solid #444; }
         .cookie-btn { background: #fff; color: #000; border: none; padding: 8px 25px; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px; margin-left: 15px; }
 
-        /* Botões Gerais */
+        /* General Buttons */
         .btn-main { display: block; width: 100%; padding: 15px; margin: 20px 0; border: 2px solid black; background: white; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
         .btn-admin-toggle { background: #000; color: #fff; max-width: 300px; margin: 0 auto; }
 
@@ -64,6 +64,8 @@
         #lightbox img { max-width: 90%; max-height: 90%; }
 
         footer { background-color: #000; color: #fff; text-align: center; padding: 40px 20px; margin-top: 50px; }
+        footer a { color: #888; text-decoration: none; margin-left: 15px; font-size: 0.8rem; transition: 0.3s; }
+        footer a:hover { color: #fff; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -80,21 +82,21 @@
 
     <div class="container">
         <div id="admin-controls">
-            <button id="toggle-icon-btn" class="btn-main btn-admin-toggle" onclick="toggleAdminPanel()">+ Nova Publicação</button>
+            <button id="toggle-icon-btn" class="btn-main btn-admin-toggle" onclick="toggleAdminPanel()">+ New Post</button>
             <div id="admin-panel">
-                <h2 style="margin-top:0">Criar Nova Notícia</h2>
-                <input type="text" id="post-title" placeholder="Título da Notícia">
-                <input type="text" id="post-image" placeholder="URL da Imagem">
-                <textarea id="post-body" rows="8" placeholder="Escreva o conteúdo aqui..."></textarea>
+                <h2 style="margin-top:0">Create New Post</h2>
+                <input type="text" id="post-title" placeholder="Post Title">
+                <input type="text" id="post-image" placeholder="Image URL">
+                <textarea id="post-body" rows="8" placeholder="Write content here (use paragraphs)..."></textarea>
                 <div style="display: flex; gap: 10px;">
-                    <button class="btn-main" style="background: #000; color: #fff; margin: 0;" onclick="createPost()">Publicar</button>
-                    <button class="btn-main" style="margin: 0;" onclick="toggleAdminPanel()">Cancelar</button>
+                    <button class="btn-main" style="background: #000; color: #fff; margin: 0;" onclick="createPost()">Publish</button>
+                    <button class="btn-main" style="margin: 0;" onclick="toggleAdminPanel()">Cancel</button>
                 </div>
             </div>
         </div>
 
         <div id="blog-feed"></div>
-        <button id="load-more" class="btn-main" style="display:none;" onclick="toggleLoadMore()">See more</button>
+        <button id="load-more" class="btn-main" style="display:none;" onclick="toggleLoadMore()">See More News</button>
     </div>
 
     <div id="cookie-banner">
@@ -104,14 +106,16 @@
 
     <div id="lightbox" onclick="this.style.display='none'"><img id="lightbox-img" src=""></div>
 
-    <footer>Deep Horizon. All rights reserved © 2026</footer>
+    <footer>
+        Deep Horizon. All rights reserved © 2026 
+        <a href="about.html">About Us</a>
+    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs, startAfter, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        const firebaseConfig = {
   apiKey: "AIzaSyALHh2CFuSSWI2MR6RyiqRZZf4ABnp9Zyo",
   authDomain: "deep-horizons-51171.firebaseapp.com",
   projectId: "deep-horizons-51171",
@@ -135,7 +139,7 @@
                 isAdmin = (user.email === "campameurer@gmail.com");
                 document.getElementById('user-info').innerText = user.email;
                 document.getElementById('user-info').style.display = 'inline';
-                document.getElementById('login-btn').innerText = 'Sair';
+                document.getElementById('login-btn').innerText = 'Logout';
                 document.getElementById('login-btn').onclick = () => auth.signOut().then(() => location.reload());
                 if (isAdmin) document.getElementById('admin-controls').style.display = 'block';
             }
@@ -152,13 +156,13 @@
             const btn = document.getElementById('toggle-icon-btn');
             const isVisible = panel.style.display === 'block';
             panel.style.display = isVisible ? 'none' : 'block';
-            btn.innerText = isVisible ? "+ Nova Publicação" : "- Nova Publicação";
+            btn.innerText = isVisible ? "+ New Post" : "- New Post";
         };
 
         window.deletePost = async (event, postId) => {
             event.stopPropagation();
-            if (confirm("Deseja apagar esta notícia permanentemente?")) {
-                if (confirm("CERTEZA ABSOLUTA?")) {
+            if (confirm("Do you want to delete this news permanently?")) {
+                if (confirm("ARE YOU ABSOLUTELY SURE?")) {
                     await deleteDoc(doc(db, "posts", postId));
                     location.reload();
                 }
@@ -207,7 +211,7 @@
 
         window.toggleLoadMore = () => {
             const btn = document.getElementById('load-more');
-            if (btn.innerText === "VER MAIS NOTÍCIAS") { loadPosts(true); btn.innerText = "RECOLHER NOTÍCIAS"; }
+            if (btn.innerText === "SEE MORE NEWS") { loadPosts(true); btn.innerText = "COLLAPSE NEWS"; }
             else { location.reload(); }
         };
 
@@ -215,7 +219,7 @@
             const title = document.getElementById('post-title').value;
             const img = document.getElementById('post-image').value;
             const body = document.getElementById('post-body').value;
-            if(!title || !body) return alert("Preencha título e conteúdo!");
+            if(!title || !body) return alert("Fill in title and content!");
             await addDoc(collection(db, "posts"), { title, image: img, content: body, date: new Date() });
             location.reload();
         };
