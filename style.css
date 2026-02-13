@@ -1,52 +1,48 @@
-:root { --primary-black: #000000; --bg-gray: #fcfcfc; --text-main: #1a1a1a; }
+:root { 
+    --primary-black: #000000; 
+    --bg-gray: #fcfcfc; 
+}
 
 body { 
     font-family: 'Inter', sans-serif; 
     margin: 0; 
     background-color: var(--bg-gray); 
-    color: var(--text-main); 
-    line-height: 1.6; 
     display: flex; 
     flex-direction: column; 
     min-height: 100vh; 
 }
 
 nav { background: #000; padding: 10px 20px; display: flex; justify-content: flex-end; align-items: center; }
+#login-btn { background: #4285F4; color: white; border: none; padding: 8px 15px; cursor: pointer; font-weight: bold; border-radius: 4px; }
+#user-info { color: white; font-size: 0.8rem; margin-right: 10px; }
 
-#login-btn { background: #4285F4; color: white; border: none; padding: 8px 15px; cursor: pointer; font-weight: bold; border-radius: 4px; font-size: 0.8rem; }
-
-#user-info { color: white; font-size: 0.8rem; margin-right: 10px; display: none; }
-
-header { background-color: var(--primary-black); color: white; padding: 50px 20px; text-align: center; }
-header h1 { margin: 0; font-size: 3rem; text-transform: uppercase; letter-spacing: 8px; font-weight: 900; }
-header p { margin: 10px 0 0; font-size: 1rem; color: #888; letter-spacing: 2px; }
+header { background-color: #000; color: white; padding: 60px 20px; text-align: center; }
+header h1 { margin: 0; font-size: 3rem; letter-spacing: 8px; font-weight: 900; }
 
 .container { max-width: 1000px; margin: 0 auto; padding: 20px; flex: 1; }
 
-#admin-panel { display: none; background: #fff; padding: 30px; border: 3px solid #000; margin: 20px 0; box-shadow: 10px 10px 0px #000; }
-#admin-panel input, #admin-panel textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; width: 100%; box-sizing: border-box; }
+/* News Cards */
+#blog-feed { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; }
+.blog-card { background: white; border: 1px solid #eee; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; }
+.blog-card.active { grid-column: 1 / -1; border: 1px solid #000; }
 
-#blog-feed { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; margin-top: 30px; }
+.card-header { padding: 20px; position: relative; order: 1; }
+.card-header h3 { margin: 0; font-size: 1.6rem !important; font-weight: 800 !important; color: #000; line-height: 1.2; }
+.active .card-header h3 { font-size: 2.2rem !important; }
 
-.blog-card { background: white; border: 1px solid #eee; cursor: pointer; position: relative; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
-.blog-card.active { grid-column: 1 / -1; cursor: default; border: 1px solid #000; }
+.card-content { display: none; padding: 25px; order: 2; white-space: pre-wrap; font-size: 1.1rem; }
+.active .card-content { display: block; }
 
-.card-header { padding: 20px; position: relative; }
-.card-header h3 { margin: 0; font-size: 1.5rem; font-weight: 800; color: #000; }
-.active .card-header h3 { font-size: 2.2rem; }
+.card-image { order: 3; }
+.card-image img { width: 100%; height: 300px; object-fit: cover; display: block; }
+.active .card-image img { height: auto; max-height: 600px; }
 
+/* Admin Options */
 .admin-menu-container { position: absolute; top: 10px; right: 40px; }
 .admin-dots { cursor: pointer; font-size: 1.8rem; font-weight: bold; }
 .admin-options { display: none; position: absolute; right: 0; background: white; border: 1px solid #000; box-shadow: 5px 5px 0px #000; z-index: 100; }
+.admin-options button { width: 100%; padding: 10px; border: none; background: none; cursor: pointer; text-align: left; }
 
-.card-content { display: none; padding: 25px; white-space: pre-wrap; order: 1; }
-.active .card-content { display: block; }
-
-.card-image { order: 2; }
-.card-image img { width: 100%; height: 250px; object-fit: cover; display: block; }
-.active .card-image img { height: 450px; }
-
-.btn-main { display: block; width: 100%; padding: 15px; border: 2px solid black; background: white; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-
-footer { background-color: #000; color: #fff; text-align: center; padding: 40px 20px; margin-top: 50px; }
+.btn-main { width: 100%; padding: 15px; border: 2px solid #000; background: #fff; font-weight: bold; cursor: pointer; margin: 10px 0; }
+footer { background: #000; color: #fff; text-align: center; padding: 40px; margin-top: auto; }
 footer a { color: #888; text-decoration: none; margin: 0 10px; }
