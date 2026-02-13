@@ -4,12 +4,13 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signO
 
 // --- CONFIGURAÇÃO DO FIREBASE ---
 const firebaseConfig = {
-    apiKey: "COLE_AQUI",
-    authDomain: "COLE_AQUI",
-    projectId: "COLE_AQUI",
-    storageBucket: "COLE_AQUI",
-    messagingSenderId: "COLE_AQUI",
-    appId: "COLE_AQUI"
+  apiKey: "AIzaSyALHh2CFuSSWI2MR6RyiqRZZf4ABnp9Zyo",
+  authDomain: "deep-horizons-51171.firebaseapp.com",
+  projectId: "deep-horizons-51171",
+  storageBucket: "deep-horizons-51171.firebasestorage.app",
+  messagingSenderId: "670734932259",
+  appId: "1:670734932259:web:07dab3af4aefb077221496",
+  measurementId: "G-TPLB1K4SEY"
 };
 
 const app = initializeApp(firebaseConfig);
