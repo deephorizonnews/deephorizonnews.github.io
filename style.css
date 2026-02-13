@@ -2,18 +2,17 @@
 
 body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--bg-gray); display: flex; flex-direction: column; min-height: 100vh; }
 
-/* Header */
+/* Header & Nav */
 header { background-color: #000; color: white; padding: 60px 20px; text-align: center; }
 header h1 { margin: 0; font-size: 3rem; letter-spacing: 8px; font-weight: 900; }
-
-/* Navigation */
 nav { background: #000; padding: 10px 20px; display: flex; justify-content: flex-end; align-items: center; }
 #login-btn { background: #4285F4; color: white; border: none; padding: 8px 15px; cursor: pointer; font-weight: bold; border-radius: 4px; }
 
-/* Cards */
+/* Grid e Container */
 .container { max-width: 1000px; margin: 0 auto; padding: 20px; flex: 1; }
 #blog-feed { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; }
 
+/* News Cards */
 .blog-card { 
     background: white; 
     border: 1px solid #eee; 
@@ -21,40 +20,44 @@ nav { background: #000; padding: 10px 20px; display: flex; justify-content: flex
     overflow: hidden; 
     display: flex; 
     flex-direction: column; 
-    transition: 0.3s; 
-    cursor: pointer; /* Mãozinha no card */
     position: relative;
+    cursor: pointer; /* GARANTE A MÃOZINHA EM TODO O CARD */
+    transition: transform 0.2s;
 }
+.blog-card:hover { transform: translateY(-3px); }
+.blog-card.active { grid-column: 1 / -1; border: 2px solid #000; cursor: default; transform: none; }
 
-.blog-card.active { grid-column: 1 / -1; border: 2px solid #000; cursor: default; }
-
-/* Fechar Notícia (X) */
+/* Botão Fechar (X) - CORRIGIDO */
 .close-post { 
-    display: none; 
+    display: none; /* Escondido por padrão */
     position: absolute; 
-    top: 15px; 
-    left: 15px; 
-    font-size: 25px; 
+    top: 20px;    /* Distância do topo */
+    left: 20px;   /* Distância da esquerda */
+    font-size: 28px; 
     font-weight: bold; 
     cursor: pointer; 
-    z-index: 10; 
-    background: #eee; 
-    width: 35px; 
-    height: 35px; 
+    z-index: 20; 
+    background: rgba(0,0,0,0.05); 
+    width: 40px; 
+    height: 40px; 
     border-radius: 50%; 
     text-align: center; 
-    line-height: 32px;
+    line-height: 38px;
+    color: #333;
 }
-.active .close-post { display: block; }
+.active .close-post { 
+    display: block; /* SÓ APARECE QUANDO ATIVO */
+}
+.close-post:hover { background: #000; color: #fff; }
 
-/* Cabeçalho do Card */
+/* Header do Card */
 .card-header { padding: 40px 25px 20px 25px; position: relative; order: 1; }
-.card-header h3 { margin: 0; font-size: 1.6rem !important; font-weight: 800 !important; color: #000; line-height: 1.2; padding-right: 40px; }
-.active .card-header h3 { font-size: 2.2rem !important; }
+.card-header h3 { margin: 0; font-size: 1.6rem; font-weight: 800; color: #000; line-height: 1.2; padding-right: 50px; }
+.active .card-header h3 { font-size: 2.2rem; margin-top: 20px; }
 
-/* Três Pontinhos (Admin) */
-.admin-menu-container { position: absolute; top: 15px; right: 15px; z-index: 5; }
-.admin-dots { cursor: pointer; font-size: 2rem; font-weight: bold; padding: 5px; line-height: 1; }
+/* Três Pontinhos */
+.admin-menu-container { position: absolute; top: 20px; right: 20px; z-index: 15; }
+.admin-dots { cursor: pointer; font-size: 2rem; font-weight: bold; line-height: 1; }
 .admin-options { 
     display: none; 
     position: absolute; 
@@ -63,22 +66,18 @@ nav { background: #000; padding: 10px 20px; display: flex; justify-content: flex
     border: 2px solid #000; 
     box-shadow: 5px 5px 0px #000; 
     z-index: 100; 
-    min-width: 100px;
 }
 .admin-options button { width: 100%; padding: 12px; border: none; background: none; cursor: pointer; text-align: left; font-weight: bold; }
-.admin-options button:hover { background: #f0f0f0; }
 
-/* Conteúdo e Imagem */
-.card-content { display: none; padding: 25px; order: 2; white-space: pre-wrap; font-size: 1.1rem; line-height: 1.8; }
+/* Conteúdo e Imagem - ORDEM CORRIGIDA */
+.card-content { display: none; padding: 25px; order: 2; white-space: pre-wrap; font-size: 1.1rem; border-top: 1px solid #f0f0f0; }
 .active .card-content { display: block; }
 
-.card-image { order: 3; }
+.card-image { order: 3; } /* SEMPRE NO FINAL */
 .card-image img { width: 100%; height: 300px; object-fit: cover; display: block; }
 .active .card-image img { height: auto; max-height: 600px; }
 
-/* Botões e Footer */
-.btn-main { width: 100%; padding: 15px; border: 2px solid #000; background: #fff; font-weight: bold; cursor: pointer; margin: 10px 0; text-transform: uppercase; }
-.btn-main:hover { background: #000; color: #fff; }
-
+/* Footer e Botões */
+.btn-main { width: 100%; padding: 15px; border: 2px solid #000; background: #fff; font-weight: bold; cursor: pointer; margin: 10px 0; }
 footer { background: #000; color: #fff; text-align: center; padding: 40px; margin-top: 50px; }
-footer a { color: #888; text-decoration: none; margin: 0 10px; cursor: pointer; }
+footer a { color: #888; text-decoration: none; margin: 0 10px; }
