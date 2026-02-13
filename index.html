@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-adsense-account" content="ca-pub-1257551136033803">
     <title>Deep Horizon | Everyday's technology news</title>
+    <meta name="description" content="Latest technology updates and AI news.">
     
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
 
     <link rel="stylesheet" href="style.css">
+
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1257551136033803" crossorigin="anonymous"></script>
 </head>
 <body>
+
     <nav>
         <span id="user-info"></span>
         <button id="login-btn">Login with Google</button>
@@ -23,8 +27,8 @@
 
     <div class="container">
         <div id="admin-controls" style="display: none;">
-            <button class="btn-main" onclick="toggleAdminPanel()">+ NEW POST</button>
-            <div id="admin-panel" style="display: none;">
+            <button id="toggle-icon-btn" class="btn-main" onclick="toggleAdminPanel()">+ NEW POST</button>
+            <div id="admin-panel">
                 <h2 id="panel-title">Create New Post</h2>
                 <input type="hidden" id="edit-id">
                 <input type="text" id="post-title" placeholder="Post Title">
@@ -38,7 +42,7 @@
         </div>
 
         <div id="blog-feed"></div>
-        <button id="load-more" class="btn-main" style="display:none;" onclick="loadPosts(true)">See More News</button>
+        <button id="load-more" class="btn-main" style="display:none;" onclick="loadPosts(true)">Load More</button>
     </div>
 
     <footer>
