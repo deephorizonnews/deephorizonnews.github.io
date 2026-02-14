@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-adsense-account" content="ca-pub-1257551136033803">
-    <title>Deep Horizon | News</title>
+    <title>Deep Horizon | Technology News</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     <link rel="stylesheet" href="style.css">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1257551136033803" crossorigin="anonymous"></script>
 </head>
 <body>
+
     <nav>
-        <span id="user-info" style="color: white; margin-right: 15px; font-size: 0.8rem;"></span>
+        <span id="user-info"></span>
         <button id="login-btn">Login with Google</button>
     </nav>
 
@@ -37,7 +38,13 @@
         </div>
 
         <div id="blog-feed"></div>
+
         <button id="load-more" class="btn-main" style="display:none;" onclick="loadPosts(true)">See More News</button>
+    </div>
+
+    <div id="image-overlay" onclick="closeFullscreen()">
+        <button id="close-overlay" onclick="closeFullscreen()">✕</button>
+        <img id="fullscreen-img" src="" alt="Full View">
     </div>
 
     <footer>
